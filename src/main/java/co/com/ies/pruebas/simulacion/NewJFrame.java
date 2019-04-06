@@ -225,8 +225,10 @@ public class NewJFrame extends javax.swing.JFrame {
     final long tic = System.currentTimeMillis();
     Sorteo sorteo = sorteoSeleccionado;
     
-    ResultadoSimulacion ganadores = null;
-    jLabel1.setText("Calculando..");
+//    ResultadoSimulacion ganadores = null;
+    Map<Integer, Integer> ganadores = null;
+    
+    jLabel1.setText("Calculando...");
     if(rdbtnBingo.isSelected()) {
       
       SimulacionBingo simulacion = new SimulacionBingoImpl();
@@ -239,28 +241,28 @@ public class NewJFrame extends javax.swing.JFrame {
       }
        
       resultadoSimulacion = simulacion.consulta(figuras);
-      jTable1.setModel(toTableModel(resultadoSimulacion.getGanadores()));
+      
+      ganadores = resultadoSimulacion.getGanadores();
+      jTable1.setModel(toTableModel(ganadores));
       
     }else {
       
-      //TODO llamar el objeto de simulacion
-      
+      //TODO llamar el objeto de simulacion      
       
     }
     
     final long tac = System.currentTimeMillis();
     final long tictac = tac - tic;
-    System.out.println("------ tiempo" + tictac);
+    
+    System.out.println("\n------ tiempo: " + tictac);
     
     if(resultadoSimulacion == null) {
       return;
     }
     
-    int cantidadBalotas = (ganadores != null)? resultadoSimulacion.getCantidadBalotas():0;
-    jLabel1.setText("Tiempo transcurido:" + tictac + " ms, Cantidad de Balotas: "
-        + cantidadBalotas);
-    System.out.println("------ " + ganadores);
-    
+    int cantidadBalotas = (ganadores != null) ? resultadoSimulacion.getCantidadBalotas() : 0;
+    jLabel1.setText("Tiempo transcurrido: " + tictac + " ms, Cantidad de Balotas: " + cantidadBalotas);
+    System.out.println("------ ganadores: " + ganadores);    
     
     
   }// GEN-LAST:event_jButton1ActionPerformed
