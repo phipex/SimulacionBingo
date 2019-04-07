@@ -74,17 +74,17 @@ public class SorteosHelper {
       System.out.println("SorteoHelper::saveBalotasSorteo json= "+json);
       
       OkHttpClient client = new OkHttpClient();
-
+  
       MediaType mediaType = MediaType.parse("application/json");
       RequestBody body = RequestBody.create(mediaType, json);
       Request request = new Request.Builder()
-        .url("http://localhost:8084/war/jaxrs/balotera/sorteo/automatico")
+        .url("http://localhost:8282/BackendBingo-web/rest/automatico/balotera/precalculada")
         .post(body)
         .addHeader("Accept", "application/json")
         .addHeader("Content-Type", "application/json")
         .addHeader("cache-control", "no-cache")
         .build();
-
+  
       Response response = client.newCall(request).execute();
       return true;
     } catch (IOException e) {
@@ -100,20 +100,14 @@ public class SorteosHelper {
     List<Map<String, Object>> result = new ArrayList<>();
     
     int size = balotas.size();
-    for (int j = 0; j < size; j++) {
+    for (int j = 1; j <= size; j++) {
       Integer numero = balotas.get(j);
       Map<String, Object> balota = new HashMap<>();
-      balota.put("id", 0L);
       
-      balota.put("orden", Integer.valueOf(j));
-      balota.put("numero", numero);
+      balota.put("nmOrden", Integer.valueOf(j));
+      balota.put("nmNumero", numero);
       
-      
-      Map<String, Object> sorteo = new HashMap<>();  
-      sorteo.put("codigo", idSorteo);
-      sorteo.put("nombre", String.valueOf(idSorteo));
-      sorteo.put("adicion", String.valueOf(idSorteo));
-      balota.put("sorteo",sorteo);
+      balota.put("nmSorteo",idSorteo);
       
       result.add(balota);
     }
