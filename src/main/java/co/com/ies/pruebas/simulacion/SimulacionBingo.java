@@ -16,11 +16,11 @@ public abstract class SimulacionBingo {
 
   public abstract List<Integer> getBalotasRandom();
 
-  public abstract Map<Integer, Integer> getGanadores(List<Integer> balotas, List<Integer> figuras);
+  public abstract Map<Integer, Integer> getGanadores(List<Integer> balotas, List<Integer> figuras, int cantidadCartones);
 
 
 
-  public ResultadoSimulacion consulta(List<Integer> figuras) {
+  public ResultadoSimulacion consulta(List<Integer> figuras, int cantidadCartones) {
     Map<Integer, Integer> cantidadesxFigura = new HashMap<>();
     List<Integer> balotas = getBalotasRandom();
 
@@ -34,7 +34,7 @@ public abstract class SimulacionBingo {
 
       System.out.println("balotasByOrden {}" + balotasByOrden);
       System.out.println("figura en juego" + figuras);
-      Map<Integer, Integer> ganadores = getGanadores(balotasByOrden, figuras);
+      Map<Integer, Integer> ganadores = getGanadores(balotasByOrden, figuras, cantidadCartones);
       int cantidadGanadores = ganadores.size();
       if (cantidadGanadores > 0) {
         getCantidadesxFigura(ganadores, cantidadesxFigura);

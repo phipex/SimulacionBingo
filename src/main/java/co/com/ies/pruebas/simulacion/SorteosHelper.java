@@ -100,11 +100,11 @@ public class SorteosHelper {
     List<Map<String, Object>> result = new ArrayList<>();
     
     int size = balotas.size();
-    for (int j = 1; j <= size; j++) {
+    for (int j = 0; j < size; j++) {
       Integer numero = balotas.get(j);
       Map<String, Object> balota = new HashMap<>();
       
-      balota.put("nmOrden", Integer.valueOf(j));
+      balota.put("nmOrden", Integer.valueOf(j + 1));
       balota.put("nmNumero", numero);
       
       balota.put("nmSorteo",idSorteo);

@@ -6,6 +6,7 @@ package co.com.ies.pruebas.simulacion;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -21,7 +22,10 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
+import javax.swing.text.NumberFormatter;
 import co.com.ies.pruebas.simulacion.SorteosHelper.Sorteo;
+import javax.swing.JTextField;
+import javax.swing.JFormattedTextField;
 
 /**
  *
@@ -131,7 +135,7 @@ public class NewJFrame extends javax.swing.JFrame {
       }
     });
 
-    JLabel lblGuardarBalotas = new JLabel("5. Guardar Balotas");
+    JLabel lblGuardarBalotas = new JLabel("6. Guardar Balotas");
 
     JLabel lblBusqueGanadores = new JLabel("4. Busque Ganadores");
 
@@ -151,38 +155,64 @@ public class NewJFrame extends javax.swing.JFrame {
 
     grupo1.add(rdbtnKeno);
     grupo1.add(rdbtnBingo);
+    
+    JLabel lblIngreseVendidos = new JLabel("5. Ingrese vendidos");
+    
+    NumberFormat longFormat = NumberFormat.getIntegerInstance();
+
+    NumberFormatter numberFormatter = new NumberFormatter(longFormat);
+    numberFormatter.setValueClass(Long.class); //optional, ensures you will always get a long value
+    numberFormatter.setAllowsInvalid(false); //this is the key!!
+    numberFormatter.setMinimum(0l); //Optional
+    
+    textField = new JFormattedTextField(numberFormatter);
+    textField.setColumns(10);
+    
+    JLabel lblSeleccioneElNumero = new JLabel("Seleccione el numero de cartones vendidos");
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
     layout.setHorizontalGroup(
       layout.createParallelGroup(Alignment.LEADING)
         .addGroup(layout.createSequentialGroup()
-          .addGap(43)
-          .addGroup(layout.createParallelGroup(Alignment.LEADING)
-            .addComponent(jScrollPane1, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 752, Short.MAX_VALUE)
+          .addGap(30)
+          .addComponent(lblSeleccioneEl_1, 0, 0, Short.MAX_VALUE)
+          .addPreferredGap(ComponentPlacement.RELATED)
+          .addGroup(layout.createParallelGroup(Alignment.TRAILING)
+            .addComponent(jScrollPane1, GroupLayout.DEFAULT_SIZE, 1074, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
               .addGroup(layout.createParallelGroup(Alignment.LEADING)
-                .addComponent(lblBusqueGanadores)
-                .addComponent(lblGuardarBalotas, GroupLayout.PREFERRED_SIZE, 111, GroupLayout.PREFERRED_SIZE)
-                .addGroup(layout.createParallelGroup(Alignment.TRAILING, false)
-                  .addComponent(lblSeleccioneEl_1, Alignment.LEADING, 0, 0, Short.MAX_VALUE)
-                  .addComponent(lblSeleccioneEl, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                  .addComponent(lblCargarSorteos, Alignment.LEADING)))
-              .addPreferredGap(ComponentPlacement.UNRELATED)
+                .addGroup(layout.createSequentialGroup()
+                  .addGroup(layout.createParallelGroup(Alignment.LEADING)
+                    .addComponent(lblSeleccioneEl)
+                    .addComponent(lblCargarSorteos))
+                  .addGap(23))
+                .addGroup(layout.createSequentialGroup()
+                  .addComponent(lblGuardarBalotas, GroupLayout.PREFERRED_SIZE, 111, GroupLayout.PREFERRED_SIZE)
+                  .addPreferredGap(ComponentPlacement.RELATED))
+                .addGroup(layout.createSequentialGroup()
+                  .addComponent(lblIngreseVendidos)
+                  .addPreferredGap(ComponentPlacement.RELATED))
+                .addComponent(lblBusqueGanadores))
+              .addGap(20)
               .addGroup(layout.createParallelGroup(Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                  .addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                  .addGap(18)
+                  .addComponent(lblSeleccioneElNumero))
                 .addGroup(layout.createSequentialGroup()
                   .addComponent(rdbtnBingo)
                   .addGap(10)
                   .addComponent(rdbtnKeno))
                 .addComponent(comboBox, GroupLayout.PREFERRED_SIZE, 331, GroupLayout.PREFERRED_SIZE)
-                .addComponent(lblNewLabel, GroupLayout.DEFAULT_SIZE, 631, Short.MAX_VALUE)
-                .addGroup(layout.createSequentialGroup()
-                  .addGroup(layout.createParallelGroup(Alignment.TRAILING, false)
-                    .addComponent(btnGuardarBalotas, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton1, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE))
-                  .addGap(18)
+                .addComponent(lblNewLabel, GroupLayout.DEFAULT_SIZE, 923, Short.MAX_VALUE)
+                .addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 127, GroupLayout.PREFERRED_SIZE)
+                .addGroup(Alignment.TRAILING, layout.createSequentialGroup()
+                  .addGroup(layout.createParallelGroup(Alignment.TRAILING)
+                    .addComponent(btnGuardarBalotas, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
+                    .addComponent(jButton1, GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE))
+                  .addGap(20)
                   .addComponent(jLabel1, GroupLayout.PREFERRED_SIZE, 457, GroupLayout.PREFERRED_SIZE)
-                  .addGap(24))
-                .addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 127, GroupLayout.PREFERRED_SIZE))))
+                  .addGap(314)))))
           .addContainerGap())
     );
     layout.setVerticalGroup(
@@ -200,21 +230,30 @@ public class NewJFrame extends javax.swing.JFrame {
           .addComponent(lblNewLabel)
           .addGap(9)
           .addGroup(layout.createParallelGroup(Alignment.BASELINE)
-            .addComponent(lblSeleccioneEl_1, GroupLayout.DEFAULT_SIZE, 26, Short.MAX_VALUE)
             .addComponent(rdbtnBingo)
             .addComponent(rdbtnKeno))
           .addPreferredGap(ComponentPlacement.RELATED)
+          .addGroup(layout.createParallelGroup(Alignment.TRAILING)
+            .addComponent(lblIngreseVendidos)
+            .addGroup(layout.createParallelGroup(Alignment.BASELINE)
+              .addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+              .addComponent(lblSeleccioneElNumero)))
+          .addPreferredGap(ComponentPlacement.UNRELATED)
           .addGroup(layout.createParallelGroup(Alignment.BASELINE)
             .addComponent(lblBusqueGanadores)
             .addComponent(jButton1)
             .addComponent(jLabel1))
-          .addGap(26)
+          .addGap(11)
           .addGroup(layout.createParallelGroup(Alignment.BASELINE)
-            .addComponent(lblGuardarBalotas)
-            .addComponent(btnGuardarBalotas))
-          .addGap(18)
-          .addComponent(jScrollPane1, GroupLayout.PREFERRED_SIZE, 97, GroupLayout.PREFERRED_SIZE)
+            .addComponent(btnGuardarBalotas)
+            .addComponent(lblGuardarBalotas))
+          .addPreferredGap(ComponentPlacement.UNRELATED)
+          .addComponent(jScrollPane1, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE)
           .addGap(22))
+        .addGroup(layout.createSequentialGroup()
+          .addGap(96)
+          .addComponent(lblSeleccioneEl_1, GroupLayout.DEFAULT_SIZE, 26, Short.MAX_VALUE)
+          .addGap(216))
     );
     getContentPane().setLayout(layout);
 
@@ -239,8 +278,14 @@ public class NewJFrame extends javax.swing.JFrame {
       for (Entry<Integer, String> integer : figurasSorteo.entrySet()) {
         figuras.add(integer.getKey());
       }
-       
-      resultadoSimulacion = simulacion.consulta(figuras);
+      String textValue = textField.getText();
+      int cantidadCartones = "".equals(textValue)?0: Integer.parseInt(textValue);
+      
+      if(cantidadCartones <= 0) {
+        cantidadCartones = 30000;
+      }
+      
+      resultadoSimulacion = simulacion.consulta(figuras, cantidadCartones);
       
       ganadores = resultadoSimulacion.getGanadores();
       jTable1.setModel(toTableModel(ganadores));
@@ -322,4 +367,5 @@ public class NewJFrame extends javax.swing.JFrame {
   private javax.swing.JScrollPane jScrollPane1;
   private javax.swing.JTable jTable1;
   private ButtonGroup grupo1;
+  private JFormattedTextField textField;
 }

@@ -66,7 +66,7 @@ public class SimulacionBingoImpl extends SimulacionBingo {
     }
 
     @Override
-    public Map<Integer, Integer> getGanadores(List<Integer> balotas, List<Integer> figuras) {
+    public Map<Integer, Integer> getGanadores(List<Integer> balotas, List<Integer> figuras, int cantidadCartones) {
         Map<Integer, Integer> result = new HashMap<>();
             
         DbUtilsHelper r = DbUtilsHelper.getInstance();
@@ -77,7 +77,7 @@ public class SimulacionBingoImpl extends SimulacionBingo {
               r.setupDB();
             }
             
-            databaseRequest(connection, balotas, figuras, result);
+            databaseRequest(connection, balotas, figuras, result, cantidadCartones);
             
             return result;
         } catch (SQLException ex) {
@@ -88,12 +88,12 @@ public class SimulacionBingoImpl extends SimulacionBingo {
         return result;
     }
 
-    private void databaseRequest(final Connection connection, List<Integer> balotas, List<Integer> figuras, Map<Integer, Integer> result) throws SQLException, NumberFormatException {
+    private void databaseRequest(final Connection connection, List<Integer> balotas, List<Integer> figuras, Map<Integer, Integer> result, int cantidadCartones) throws SQLException, NumberFormatException {
         MapListHandler beanListHandler = new MapListHandler();
         
         QueryRunner runner = new QueryRunner();
         List<Map<String, Object>> list
-                = runner.query(connection, getQuery(balotas,figuras), beanListHandler);
+                = runner.query(connection, getQuery(balotas,figuras,cantidadCartones), beanListHandler);
         
         for (Map<String, Object> record : list) {
             final String stabla = record.get(TABLA_FIELD).toString();
@@ -104,14 +104,14 @@ public class SimulacionBingoImpl extends SimulacionBingo {
         }
     }
 
-    private String getQuery(List<Integer> balotas, List<Integer> figuras){
+    private String getQuery(List<Integer> balotas, List<Integer> figuras, int cantidadCartones){
         String sbalotas = listIntegerToString(balotas);
         String sfiguras = listIntegerToString(figuras);
         
-        return getQuery( sfiguras,sbalotas);
+        return getQuery( sfiguras,sbalotas, cantidadCartones);
     }
     
-    private String getQuery(String figuras, String balotas) {
+    private String getQuery(String figuras, String balotas, int cantidadCartones) {
         StringBuilder sb = new StringBuilder();
         sb.append("SELECT (figurapos <@ tablapos) AS ganador, ");
         sb.append("       figura_nm_pk as figura, nm_tabla as tabla ");
@@ -131,7 +131,11 @@ public class SimulacionBingoImpl extends SimulacionBingo {
         sb.append("             tb_celda.nm_numero, ");
         sb.append("             tb_celda.nm_posicion ");
         sb.append("      FROM public.tb_celda ");
-        sb.append("      WHERE tb_celda.nm_numero IN ( ");
+        sb.append("      WHERE");
+        sb.append("  tb_celda.nm_tabla <= ");
+        sb.append(cantidadCartones);
+        sb.append("and");
+        sb.append(" tb_celda.nm_numero IN ( ");
         sb.append(balotas);
         
         sb.append(")) AS tachados GROUP  BY nm_tabla) AS tabla_pos ON figurapos <@ tablapos ");
