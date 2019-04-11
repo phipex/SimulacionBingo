@@ -66,8 +66,8 @@ public class SimulacionBingoImpl extends SimulacionBingo {
     }
 
     @Override
-    public Map<Integer, Integer> getGanadores(List<Integer> balotas, List<Integer> figuras, int cantidadCartones) {
-        Map<Integer, Integer> result = new HashMap<>();
+    public Map<Integer, List<Integer>> getGanadores(List<Integer> balotas, List<Integer> figuras, int cantidadCartones) {
+        Map<Integer, List<Integer>> result = new HashMap<>();
             
         DbUtilsHelper r = DbUtilsHelper.getInstance();
         try {
@@ -88,19 +88,24 @@ public class SimulacionBingoImpl extends SimulacionBingo {
         return result;
     }
 
-    private void databaseRequest(final Connection connection, List<Integer> balotas, List<Integer> figuras, Map<Integer, Integer> result, int cantidadCartones) throws SQLException, NumberFormatException {
+    private void databaseRequest(final Connection connection, List<Integer> balotas, List<Integer> figuras, Map<Integer, List<Integer>> result, int cantidadCartones) throws SQLException, NumberFormatException {
         MapListHandler beanListHandler = new MapListHandler();
         
         QueryRunner runner = new QueryRunner();
         List<Map<String, Object>> list
                 = runner.query(connection, getQuery(balotas,figuras,cantidadCartones), beanListHandler);
         
+        System.out.println("databaseRequest list="+list);
+        
         for (Map<String, Object> record : list) {
+            
+            System.out.println("databaseRequest record="+record);
             final String stabla = record.get(TABLA_FIELD).toString();
             final String sfigura = record.get(FIGURA_FIELD).toString();
             Integer tabla = Integer.valueOf(stabla);
             Integer figura = Integer.valueOf(sfigura);
-            result.put(tabla, figura);
+            //result.put(tabla, figura);
+            result.computeIfAbsent(figura, k -> new ArrayList<>()).add(tabla);
         }
     }
 

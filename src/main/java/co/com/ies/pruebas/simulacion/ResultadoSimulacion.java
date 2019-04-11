@@ -5,15 +5,18 @@ import java.util.Map;
 
 public class ResultadoSimulacion {
 
-  private Map<Integer, Integer> ganadores;
+  /**
+   * 
+   */
+  private Map<Integer, List<Integer>> ganadores;
 
   private List<Integer> balotas;
 
-  public Map<Integer, Integer> getGanadores() {
+  public Map<Integer, List<Integer>> getGanadores() {
     return ganadores;
   }
 
-  public void setGanadores(Map<Integer, Integer> ganadores) {
+  public void setGanadores(Map<Integer, List<Integer>> ganadores) {
     this.ganadores = ganadores;
   }
 

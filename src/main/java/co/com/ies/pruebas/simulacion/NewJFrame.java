@@ -265,7 +265,7 @@ public class NewJFrame extends javax.swing.JFrame {
     Sorteo sorteo = sorteoSeleccionado;
     
 //    ResultadoSimulacion ganadores = null;
-    Map<Integer, Integer> ganadores = null;
+    Map<Integer, List<Integer>> ganadores = null;
     
     jLabel1.setText("Calculando...");
     if(rdbtnBingo.isSelected()) {
@@ -312,10 +312,10 @@ public class NewJFrame extends javax.swing.JFrame {
     
   }// GEN-LAST:event_jButton1ActionPerformed
 
-  public static TableModel toTableModel(Map<?, ?> map) {
-    DefaultTableModel model = new DefaultTableModel(new Object[] {"Figura", "Cantidad"}, 0);
+  public static TableModel toTableModel(Map<Integer, List<Integer>> map) {
+    DefaultTableModel model = new DefaultTableModel(new Object[] {"Figura", "Ganadores" ,"Cantidad"}, 0);
     map.entrySet().forEach((entry) -> {
-      model.addRow(new Object[] {entry.getKey(), entry.getValue()});
+      model.addRow(new Object[] {entry.getKey(), entry.getValue(), entry.getValue().size()});
     });
     return model;
   }

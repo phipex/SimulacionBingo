@@ -4,9 +4,12 @@
  */
 package co.com.ies.pruebas.simulacion;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 /**
  *
@@ -16,12 +19,12 @@ public abstract class SimulacionBingo {
 
   public abstract List<Integer> getBalotasRandom();
 
-  public abstract Map<Integer, Integer> getGanadores(List<Integer> balotas, List<Integer> figuras, int cantidadCartones);
+  public abstract Map<Integer, List<Integer>> getGanadores(List<Integer> balotas, List<Integer> figuras, int cantidadCartones);
 
 
 
   public ResultadoSimulacion consulta(List<Integer> figuras, int cantidadCartones) {
-    Map<Integer, Integer> cantidadesxFigura = new HashMap<>();
+    Map<Integer, List<Integer>> cantidadesxFigura = new HashMap<>();
     List<Integer> balotas = getBalotasRandom();
 
     ResultadoSimulacion result = new ResultadoSimulacion();
@@ -34,10 +37,14 @@ public abstract class SimulacionBingo {
 
       System.out.println("balotasByOrden {}" + balotasByOrden);
       System.out.println("figura en juego" + figuras);
-      Map<Integer, Integer> ganadores = getGanadores(balotasByOrden, figuras, cantidadCartones);
+      
+      Map<Integer, List<Integer>> ganadores = getGanadores(balotasByOrden, figuras, cantidadCartones);
+      
+      System.out.println("consulta ganadores="+ganadores);
+      
       int cantidadGanadores = ganadores.size();
       if (cantidadGanadores > 0) {
-        getCantidadesxFigura(ganadores, cantidadesxFigura);
+        ganadores.forEach((fugura, tablas) -> cantidadesxFigura.computeIfAbsent(fugura, k -> new ArrayList<>()).addAll(tablas));
 
         cantidadesxFigura.keySet().stream().forEach(figura -> figuras.remove(figura));
         if (figuras.isEmpty()) {
@@ -54,6 +61,15 @@ public abstract class SimulacionBingo {
     return result;
   }
 
+  private void agregarGanadores(Map<Integer, List<Integer>> ganadores,
+      Map<Integer, List<Integer>> cantidadesxFigura) {
+    
+    
+    ganadores.forEach((fugura, tablas) -> cantidadesxFigura.computeIfAbsent(fugura, k -> new ArrayList<>()).addAll(tablas));
+    
+    
+  }
+
   public List<Integer> getBalotasByOrden(int orden, List<Integer> balotas) {
 
     List<Integer> balotasResult = balotas.subList(0, orden);
@@ -65,10 +81,10 @@ public abstract class SimulacionBingo {
 
     Map<Integer, Integer> cantidades = new HashMap<>();
 
-    return getCantidadesxFigura(ganadores, cantidades);
+    return getCantidadesxFiguraCount(ganadores, cantidades);
   }
 
-  private Map<Integer, Integer> getCantidadesxFigura(Map<Integer, Integer> ganadores,
+  private Map<Integer, Integer> getCantidadesxFiguraCount(Map<Integer, Integer> ganadores,
       Map<Integer, Integer> cantidades) {
     for (Map.Entry<Integer, Integer> entry : ganadores.entrySet()) {
       Integer figura = entry.getValue();
