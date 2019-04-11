@@ -16,6 +16,7 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JRadioButton;
 import javax.swing.LayoutStyle.ComponentPlacement;
@@ -24,14 +25,17 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.text.NumberFormatter;
 import co.com.ies.pruebas.simulacion.SorteosHelper.Sorteo;
-import javax.swing.JTextField;
-import javax.swing.JFormattedTextField;
 
 /**
  *
  * @author desarrollo
  */
 public class NewJFrame extends javax.swing.JFrame {
+
+  /**
+   * 
+   */
+  private static final long serialVersionUID = -7441183307847559583L;
 
   Sorteo sorteoSeleccionado;
 
@@ -292,7 +296,19 @@ public class NewJFrame extends javax.swing.JFrame {
       
     }else {
       
-      //TODO llamar el objeto de simulacion      
+      SimulacionKeno simulacion = new SimulacionKenoImp();
+      
+      String textValue = textField.getText();
+      int cantidadCartones = "".equals(textValue)?0: Integer.parseInt(textValue);
+      
+      if(cantidadCartones <= 0) {
+        cantidadCartones = 20000;
+      }
+      
+      resultadoSimulacion = simulacion.consulta(cantidadCartones);
+      
+      ganadores = resultadoSimulacion.getGanadores();
+      jTable1.setModel(toTableModel(ganadores));
       
     }
     
