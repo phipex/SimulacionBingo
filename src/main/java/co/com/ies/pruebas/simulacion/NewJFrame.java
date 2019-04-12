@@ -283,7 +283,7 @@ public class NewJFrame extends javax.swing.JFrame {
         figuras.add(integer.getKey());
       }
       String textValue = textField.getText();
-      int cantidadCartones = "".equals(textValue)?0: Integer.parseInt(textValue);
+      int cantidadCartones = "".equals(textValue)?0: Integer.parseInt(textValue.replace(".", ""));
       
       if(cantidadCartones <= 0) {
         cantidadCartones = 30000;
@@ -299,7 +299,7 @@ public class NewJFrame extends javax.swing.JFrame {
       SimulacionKeno simulacion = new SimulacionKenoImp();
       
       String textValue = textField.getText();
-      int cantidadCartones = "".equals(textValue)?0: Integer.parseInt(textValue);
+      int cantidadCartones = "".equals(textValue)?0: Integer.parseInt(textValue.replace(".", ""));
       
       if(cantidadCartones <= 0) {
         cantidadCartones = 20000;
