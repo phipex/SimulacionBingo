@@ -306,6 +306,7 @@ public class NuevaVentana {
         }
         //TODO reiniciar todos los valores seleccionados
 
+
       }
 
 
