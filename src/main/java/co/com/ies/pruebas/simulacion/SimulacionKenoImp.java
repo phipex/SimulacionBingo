@@ -40,6 +40,8 @@ public class SimulacionKenoImp extends SimulacionKeno {
       
       final String bodyJson = body.string();
       
+      System.out.println("SimulacionKenoImp:consultaSimulacion "+bodyJson);
+      
       List<Integer> balotasTemp = new ArrayList<>(); 
       
       Map<Integer, Integer> ganadoresTablaAciertosTemp = new HashMap<>();

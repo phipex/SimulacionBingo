@@ -54,6 +54,8 @@ public class SimulacionBingoImpl extends SimulacionBingo {
             
             final String bodyJson = body.string();
             
+            System.out.println("Simulacion::"+bodyJson);
+            
             Type listType = new TypeToken<ArrayList<Integer>>() {
             }.getType();
             List<Integer> yourClassList = new Gson().fromJson(bodyJson, listType);
@@ -92,8 +94,10 @@ public class SimulacionBingoImpl extends SimulacionBingo {
         MapListHandler beanListHandler = new MapListHandler();
         
         QueryRunner runner = new QueryRunner();
+        String query = getQuery(balotas,figuras,cantidadCartones);
+        System.out.println(query);
         List<Map<String, Object>> list
-                = runner.query(connection, getQuery(balotas,figuras,cantidadCartones), beanListHandler);
+                = runner.query(connection, query, beanListHandler);
         
         System.out.println("databaseRequest list="+list);
         
@@ -139,7 +143,7 @@ public class SimulacionBingoImpl extends SimulacionBingo {
         sb.append("      WHERE");
         sb.append("  tb_celda.nm_tabla <= ");
         sb.append(cantidadCartones);
-        sb.append("and");
+        sb.append(" and ");
         sb.append(" tb_celda.nm_numero IN ( ");
         sb.append(balotas);
         

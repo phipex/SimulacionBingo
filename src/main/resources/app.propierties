@@ -1,0 +1,5 @@
+database.pass=b1ng03nl1n34
+dababase.user=postgres
+database.driver=org.postgresql.Driver
+database.baseurl=jdbc:postgresql://localhost:5433/
+database.database=bingopromo

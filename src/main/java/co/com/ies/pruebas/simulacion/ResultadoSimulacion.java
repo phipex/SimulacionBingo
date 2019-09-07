@@ -1,9 +1,15 @@
 package co.com.ies.pruebas.simulacion;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
-public class ResultadoSimulacion {
+public class ResultadoSimulacion implements Serializable {
+
+  /**
+   * 
+   */
+  private static final long serialVersionUID = 5145747052584942721L;
 
   /**
    * 
