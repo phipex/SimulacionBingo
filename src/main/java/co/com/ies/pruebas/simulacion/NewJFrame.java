@@ -6,8 +6,11 @@ package co.com.ies.pruebas.simulacion;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.io.Serializable;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -30,7 +33,7 @@ import co.com.ies.pruebas.simulacion.SorteosHelper.Sorteo;
  *
  * @author desarrollo
  */
-public class NewJFrame extends javax.swing.JFrame {
+public class NewJFrame extends javax.swing.JFrame implements Serializable {
 
   /**
    * 
@@ -40,6 +43,8 @@ public class NewJFrame extends javax.swing.JFrame {
   Sorteo sorteoSeleccionado;
 
   ResultadoSimulacion resultadoSimulacion;
+  
+  List<Sorteo> sorteos = null;
 
   private JRadioButton rdbtnBingo;
 
@@ -104,8 +109,18 @@ public class NewJFrame extends javax.swing.JFrame {
         comboBox.removeAllItems();
 
         SorteosHelper sorteosHelper = new SorteosHelper();
-        List<Sorteo> sorteos = sorteosHelper.getSorteos();
+        
+        try {
+          sorteos = sorteosHelper.getSorteos();
+        } catch (Exception e1) {
+          // TODO Auto-generated catch block
+          e1.printStackTrace();
+          return;
+        }
 
+        if(sorteos == null ) {
+          return;
+        }
         // List<String> strings = new ArrayList<>(sorteos.size());
         for (Sorteo sort : sorteos) {
           String sorteo = "Id:" + sort.getId() + ", Fecha:" + sort.getFecha() + ",Figuras:"
@@ -117,6 +132,9 @@ public class NewJFrame extends javax.swing.JFrame {
         comboBox.addActionListener(new ActionListener() {
           @Override
           public void actionPerformed(ActionEvent e) {
+            if(sorteos == null ) {
+              return;
+            }
             int selectedIndex = comboBox.getSelectedIndex();
             System.out.println("selectedIndex = " + selectedIndex);
             Sorteo sorteo = sorteos.get(selectedIndex);
@@ -132,8 +150,16 @@ public class NewJFrame extends javax.swing.JFrame {
     btnGuardarBalotas.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent arg0) {
 
-        SorteosHelper helper = new SorteosHelper();
-        helper.saveBalotasSorteo(sorteoSeleccionado.getId(), resultadoSimulacion.getBalotas());
+        try {
+          SorteosHelper helper = new SorteosHelper();
+          System.out.println("sorteoSeleccionado"+sorteoSeleccionado);
+          System.out.println("resultadoSimulacion"+resultadoSimulacion);
+          Integer id = sorteoSeleccionado.getId();
+          List<Integer> balotas = resultadoSimulacion.getBalotas();
+          helper.saveBalotasSorteo(id, balotas);
+        } catch (Exception e) {
+          jLabel1.setText(e.getMessage());
+        }
 
 
       }
@@ -181,35 +207,28 @@ public class NewJFrame extends javax.swing.JFrame {
           .addGap(30)
           .addComponent(lblSeleccioneEl_1, 0, 0, Short.MAX_VALUE)
           .addPreferredGap(ComponentPlacement.RELATED)
-          .addGroup(layout.createParallelGroup(Alignment.TRAILING)
-            .addComponent(jScrollPane1, GroupLayout.DEFAULT_SIZE, 1074, Short.MAX_VALUE)
+          .addGroup(layout.createParallelGroup(Alignment.LEADING)
+            .addComponent(jScrollPane1, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 1074, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
               .addGroup(layout.createParallelGroup(Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                  .addGroup(layout.createParallelGroup(Alignment.LEADING)
-                    .addComponent(lblSeleccioneEl)
-                    .addComponent(lblCargarSorteos))
-                  .addGap(23))
-                .addGroup(layout.createSequentialGroup()
-                  .addComponent(lblGuardarBalotas, GroupLayout.PREFERRED_SIZE, 111, GroupLayout.PREFERRED_SIZE)
-                  .addPreferredGap(ComponentPlacement.RELATED))
-                .addGroup(layout.createSequentialGroup()
-                  .addComponent(lblIngreseVendidos)
-                  .addPreferredGap(ComponentPlacement.RELATED))
-                .addComponent(lblBusqueGanadores))
-              .addGap(20)
+                .addComponent(lblSeleccioneEl)
+                .addComponent(lblGuardarBalotas, GroupLayout.PREFERRED_SIZE, 111, GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblIngreseVendidos)
+                .addComponent(lblBusqueGanadores)
+                .addComponent(lblCargarSorteos))
+              .addGap(40)
               .addGroup(layout.createParallelGroup(Alignment.LEADING)
+                .addComponent(comboBox, GroupLayout.PREFERRED_SIZE, 331, GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 127, GroupLayout.PREFERRED_SIZE)
                 .addGroup(layout.createSequentialGroup()
                   .addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                   .addGap(18)
                   .addComponent(lblSeleccioneElNumero))
                 .addGroup(layout.createSequentialGroup()
                   .addComponent(rdbtnBingo)
-                  .addGap(10)
+                  .addGap(18)
                   .addComponent(rdbtnKeno))
-                .addComponent(comboBox, GroupLayout.PREFERRED_SIZE, 331, GroupLayout.PREFERRED_SIZE)
-                .addComponent(lblNewLabel, GroupLayout.DEFAULT_SIZE, 923, Short.MAX_VALUE)
-                .addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 127, GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblNewLabel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 923, Short.MAX_VALUE)
                 .addGroup(Alignment.TRAILING, layout.createSequentialGroup()
                   .addGroup(layout.createParallelGroup(Alignment.TRAILING)
                     .addComponent(btnGuardarBalotas, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
@@ -223,7 +242,7 @@ public class NewJFrame extends javax.swing.JFrame {
       layout.createParallelGroup(Alignment.TRAILING)
         .addGroup(layout.createSequentialGroup()
           .addContainerGap()
-          .addGroup(layout.createParallelGroup(Alignment.BASELINE)
+          .addGroup(layout.createParallelGroup(Alignment.LEADING)
             .addComponent(btnNewButton)
             .addComponent(lblCargarSorteos))
           .addPreferredGap(ComponentPlacement.UNRELATED)
@@ -232,16 +251,15 @@ public class NewJFrame extends javax.swing.JFrame {
             .addComponent(comboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
           .addPreferredGap(ComponentPlacement.RELATED)
           .addComponent(lblNewLabel)
-          .addGap(9)
+          .addPreferredGap(ComponentPlacement.RELATED)
           .addGroup(layout.createParallelGroup(Alignment.BASELINE)
             .addComponent(rdbtnBingo)
             .addComponent(rdbtnKeno))
           .addPreferredGap(ComponentPlacement.RELATED)
-          .addGroup(layout.createParallelGroup(Alignment.TRAILING)
+          .addGroup(layout.createParallelGroup(Alignment.BASELINE)
             .addComponent(lblIngreseVendidos)
-            .addGroup(layout.createParallelGroup(Alignment.BASELINE)
-              .addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-              .addComponent(lblSeleccioneElNumero)))
+            .addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+            .addComponent(lblSeleccioneElNumero))
           .addPreferredGap(ComponentPlacement.UNRELATED)
           .addGroup(layout.createParallelGroup(Alignment.BASELINE)
             .addComponent(lblBusqueGanadores)
@@ -252,8 +270,8 @@ public class NewJFrame extends javax.swing.JFrame {
             .addComponent(btnGuardarBalotas)
             .addComponent(lblGuardarBalotas))
           .addPreferredGap(ComponentPlacement.UNRELATED)
-          .addComponent(jScrollPane1, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE)
-          .addGap(22))
+          .addComponent(jScrollPane1, GroupLayout.PREFERRED_SIZE, 101, GroupLayout.PREFERRED_SIZE)
+          .addContainerGap())
         .addGroup(layout.createSequentialGroup()
           .addGap(96)
           .addComponent(lblSeleccioneEl_1, GroupLayout.DEFAULT_SIZE, 26, Short.MAX_VALUE)
@@ -306,7 +324,7 @@ public class NewJFrame extends javax.swing.JFrame {
       }
       
       resultadoSimulacion = simulacion.consulta(cantidadCartones);
-      
+      System.out.println("-------"+resultadoSimulacion);
       ganadores = resultadoSimulacion.getGanadores();
       jTable1.setModel(toTableModel(ganadores));
       
@@ -330,8 +348,10 @@ public class NewJFrame extends javax.swing.JFrame {
 
   public static TableModel toTableModel(Map<Integer, List<Integer>> map) {
     DefaultTableModel model = new DefaultTableModel(new Object[] {"Figura", "Ganadores" ,"Cantidad"}, 0);
-    map.entrySet().forEach((entry) -> {
-      model.addRow(new Object[] {entry.getKey(), entry.getValue(), entry.getValue().size()});
+    map.entrySet().forEach(entry -> {
+      List<Integer> value = entry.getValue();
+      Collections.sort(value);
+      model.addRow(new Object[] {entry.getKey(), value, value.size()});
     });
     return model;
   }
